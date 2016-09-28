@@ -1,11 +1,20 @@
 angular.module('chatroom').controller('mainCtrl', function($scope, messageService){
+  //*****somehow get messages on scope*************
+  
   //In your controller you'll have a getMessages function and a postMessage function,
   //but should be placed on $scope.
 
-  //The getMessages function will call the getData method on the messageService object.
+  //The getMessages function will call the getMessages method on the messageService object.
   //You'll then save the result of that request to
   //your controllers $scope as messages ($scope.messages)
-
+  $scope.getMessages = function() {
+     messageService.getMessages().then(function(response) {
+      $scope.messages = response.data;  
+      console.log()
+     })
+  }
+  
+  $scope.getMessages()
 
 
   //The postMessage function will take whatever the user typed in (hint: look at
@@ -14,8 +23,15 @@ angular.module('chatroom').controller('mainCtrl', function($scope, messageServic
   //then post it to the backend.
 
 
-
+$scope.postMessage = function(message) {
+  messageService.postMessage(message);
+  $scope.message = '';
+}
   //uncomment this code when your getMessages function is finished
   //This goes and gets new data every second, which mimicking a chat room experience.
+  
+  setInterval(function(){
+   $scope.getMessages();
+ }, 1500)
 
 })
